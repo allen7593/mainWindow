@@ -1,41 +1,51 @@
 #include "mainwindow.h"
+#include <QMainWindow>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QFile>
 #include <QTextStream>
-void setCenterOfApplication(QMainWindow* widget);
+
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    //w.showFullScreen();
+    MainWindow *w=new MainWindow;
+
 
     QFile file("stylesheet.qss");
     file.open(QFile::ReadOnly);
     QTextStream filetext(&file);
     QString stylesheet=filetext.readAll();
 
-    w.setStyleSheet(stylesheet);
+    w->setStyleSheet(stylesheet);
+    setCenterOfApplication(w);
+    w->show();
+//    //a.exec();
+//    while(true)
+//    {
+//        switch(w->getStatus())
+//        {
+//            case 0:
+//                a.exec();
 
-
-    setCenterOfApplication(&w);
+//                break;
+//            case 1:
+//                w->hide();
+//                delete w;
+//                w=new MainWindow;
+//                w->show();
+//                w->setStyleSheet(stylesheet);
+//                setCenterOfApplication(w);
+//                w->setStatus(0);
+//                break;
+//            case 2:
+//            return 0;
+//                break;
+//        }
+//    }
 
     return a.exec();
 }
 
-
-void setCenterOfApplication(QMainWindow* widget)
-{
-    QSize size = widget->sizeHint();
-    QDesktopWidget* desktop = QApplication::desktop();
-    int width = desktop->width();
-    int height = desktop->height();
-    int mw = size.width();
-    int mh = size.height();
-    int centerW = (width/2) - (mw/2);
-    int centerH = (height/2) - (mh/2);
-    widget->move(centerW, centerH);
-}
 

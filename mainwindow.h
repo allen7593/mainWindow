@@ -12,6 +12,9 @@
 
 #include "picgen.h"
 
+
+void setCenterOfApplication(QMainWindow* widget);
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -19,7 +22,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    int getStatus();
+    void setStatus(int a);
 
 public slots:
     void enableButton(const QString&);
@@ -27,6 +31,7 @@ public slots:
     void logout();
     void countDown();
 private:
+    void construct();
     QLabel *varifyLabe;
     QLabel *pixLabel;
     QLineEdit *varifyEdit;
@@ -40,6 +45,7 @@ private:
 
     int count;
     int timeCount;
+    int refreshVel;
 
     picGen* p;
 };

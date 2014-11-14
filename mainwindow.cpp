@@ -11,12 +11,26 @@
 #include <QFile>
 #include <QTextStream>
 #include <unistd.h>
+#include <QApplication>
+#include <QDesktopWidget>
+
 
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent,Qt::FramelessWindowHint)
 {
+    construct();
+
+}
+
+MainWindow::~MainWindow()
+{
+}
+
+void MainWindow::construct()
+{
+    refreshVel=0;
     count=5;
     p=new picGen;
     p->mainPic();
@@ -31,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QWidget *centerWindow=new QWidget;
     this->setCentralWidget(centerWindow);
 
-    time = QTime(0,2,0);
+    time = QTime(0,0,5);
     QTimer *timer=new QTimer(this);
     timer->setInterval(1000);
     timeCount=1000;
@@ -135,10 +149,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
-MainWindow::~MainWindow()
-{
-}
-
 void MainWindow::enableButton(const QString& text)
 {
     //varifyButton->setEnabled(!text.isEmpty());
@@ -157,7 +167,10 @@ void MainWindow::checkForCode()
 
     if(count>0)
         if(varCode==hashedVal)
+        {
+            refreshVel=2;
             close();
+        }
         else
         {
             count--;
@@ -197,10 +210,32 @@ void MainWindow::countDown()
         if(retvel==QMessageBox::Ok)
         {
             //do something
-            exit(0);
+            refreshVel=1;
+            this->close();
+            QFile file("stylesheet.qss");
+            file.open(QFile::ReadOnly);
+            QTextStream filetext(&file);
+            QString stylesheet=filetext.readAll();
+            MainWindow *newWindow;
+            newWindow=new MainWindow;
+            newWindow->setStyleSheet(stylesheet);
+            setCenterOfApplication(newWindow);
+
+            //construct();
+            newWindow->show();
         }
     }
     time=time.addSecs(-1);
+}
+
+void MainWindow::setStatus(int a)
+{
+    refreshVel=a;
+}
+
+int MainWindow::getStatus()
+{
+    return refreshVel;
 }
 
 void MainWindow::logout()
@@ -211,4 +246,18 @@ void MainWindow::logout()
         system("kill -9 -1");
     else
         return;
+}
+
+
+void setCenterOfApplication(QMainWindow* widget)
+{
+    QSize size = widget->sizeHint();
+    QDesktopWidget* desktop = QApplication::desktop();
+    int width = desktop->width();
+    int height = desktop->height();
+    int mw = size.width();
+    int mh = size.height();
+    int centerW = (width/2) - (mw/2);
+    int centerH = (height/2) - (mh/2);
+    widget->move(centerW, centerH);
 }
