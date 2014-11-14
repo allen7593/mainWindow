@@ -6,6 +6,10 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <sstream>
+#include <QTimer>
+#include <QDateTime>
+#include <QPalette>
+
 #include "picgen.h"
 
 class MainWindow : public QMainWindow
@@ -21,6 +25,7 @@ public slots:
     void enableButton(const QString&);
     void checkForCode();
     void logout();
+    void countDown();
 private:
     QLabel *varifyLabe;
     QLabel *pixLabel;
@@ -29,8 +34,12 @@ private:
     QPushButton *closeButton;
 
     QPushButton* logoutBut;
+    QLabel* timeLabel;
+    QLabel* timeWarning;
+    QTime time;
 
     int count;
+    int timeCount;
 
     picGen* p;
 };
