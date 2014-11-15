@@ -7,6 +7,11 @@
 #include <QFont>
 #include <string>
 #include <QCryptographicHash>
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
+#include <sstream>
+#include <QString>
 #include "rangen.h"
 
 class picGen

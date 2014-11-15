@@ -22,8 +22,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    int getStatus();
-    void setStatus(int a);
 
 public slots:
     void enableButton(const QString&);

@@ -84,9 +84,68 @@ QImage* picGen::getShare2()
 
 void picGen::loadShare1()
 {
-    std::string absPath=homePath+"/Overlapit/s1.png";
 
-    s1->load(absPath.c_str());
+    std::string absPath=homePath+"/Overlapit/asset1";
+    std::string absPath1=homePath+"/Overlapit/assetT";
+
+//    s1->load(absPath.c_str());
+    QFile file(absPath.c_str());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Truncate)) {
+        // error processing here
+        //QMessageBox::warning(this, tr("Warning"),tr("File writting error"),QMessageBox::Ok);
+        return;
+
+    }
+
+    QTextStream ts(&file);
+    QString saved;
+    int seed;
+    saved=ts.readAll();
+
+
+
+    QFile file2(absPath1.c_str());
+    if (!file2.open(QIODevice::ReadOnly | QIODevice::Truncate)) {
+        // error processing here
+        //QMessageBox::warning(this, tr("Warning"),tr("File writting error"),QMessageBox::Ok);
+        return;
+
+    }
+
+    QTextStream ts1(&file2);
+    QString regTime;
+    regTime=ts1.readAll();
+    std::stringstream ossT(std::stringstream::out|std::stringstream::in);
+    ossT<<regTime.toStdString();
+    time_t rTime;
+    ossT>>rTime;
+    int timeD=(time(NULL)-rTime)/300;
+
+    std::stringstream ss;
+    ss<<std::hex<<saved.toStdString();
+    ss>>seed;
+    seed%=100000;
+
+    std::stringstream ssC;
+    ssC<<seed;
+
+    std::string convert;
+    convert=ssC.str();
+
+    std::ostringstream ossC1;
+
+    ossC1<<timeD;
+    convert+=ossC1.str();
+
+    std::stringstream ossC2;
+    ossC2<<convert;
+    ossC2>>seed;
+
+
+    setKey(seed);
+    share1Gen();
+
+
 }
 
 void picGen::mainPic()
@@ -123,7 +182,6 @@ void picGen::share1Gen()
         for(int j=0;j<height*2;j+=2)
         {
             caseNum=abs(g->rand())%6;
-            //std::cout<<caseNum<<std::endl;
             switch(caseNum)
             {
                 case 0:
@@ -285,7 +343,6 @@ void picGen::saveAll()
     *s2Ex=s2Ex->scaled(s,Qt::KeepAspectRatio,Qt::FastTransformation);
     s1Ex->save("s1Ex.png");
     s2Ex->save("s2Ex.png");
-    //s2Ex->save("/home/allen7593/sharet.png");
     secret->save("secret.png");
 }
 
