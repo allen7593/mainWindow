@@ -123,7 +123,6 @@ void picGen::share1Gen()
         for(int j=0;j<height*2;j+=2)
         {
             caseNum=abs(g->rand())%6;
-            //std::cout<<caseNum<<std::endl;
             switch(caseNum)
             {
                 case 0:
@@ -285,7 +284,6 @@ void picGen::saveAll()
     *s2Ex=s2Ex->scaled(s,Qt::KeepAspectRatio,Qt::FastTransformation);
     s1Ex->save("s1Ex.png");
     s2Ex->save("s2Ex.png");
-    //s2Ex->save("/home/allen7593/sharet.png");
     secret->save("secret.png");
 }
 

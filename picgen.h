@@ -24,8 +24,8 @@ public:
     void loadShare1();
 
 private:
-    static const int width=48;
-    static const int height=24;
+    static const int width=60;
+    static const int height=30;
     std::string secretStr;
     QImage* s1;
     QImage* s2;

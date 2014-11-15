@@ -34,10 +34,8 @@ void MainWindow::construct()
     count=5;
     p=new picGen;
     p->mainPic();
-    //srand(100);
     pixLabel=new QLabel;
     QImage* image;
-    //p->loadShare1();
     image=p->getShare2();
     QSize s(1000,500);
 
@@ -45,7 +43,7 @@ void MainWindow::construct()
     QWidget *centerWindow=new QWidget;
     this->setCentralWidget(centerWindow);
 
-    time = QTime(0,0,5);
+    time = QTime(0,1,30);
     QTimer *timer=new QTimer(this);
     timer->setInterval(1000);
     timeCount=1000;
@@ -62,8 +60,6 @@ void MainWindow::construct()
 
     varifyLabe=new QLabel(tr("Please enter the verification number."));
     varifyEdit=new QLineEdit;
-
-    //varifyLabe->setBuddy(varifyEdit);
 
     varifyButton=new QPushButton(tr("&Verify"));
     closeButton=new QPushButton(tr("Close"));
@@ -123,7 +119,6 @@ void MainWindow::construct()
 
     hPlaceHolder->addWidget(pixLabel);
     hPlaceHolder->addLayout(rightLayout);
-    //hPlaceHolder->addWidget(groupBox);
 
     placeHolder->addStretch();
     placeHolder->addLayout(hPlaceHolder);
@@ -151,7 +146,6 @@ void MainWindow::construct()
 
 void MainWindow::enableButton(const QString& text)
 {
-    //varifyButton->setEnabled(!text.isEmpty());
     varifyButton->setDisabled(text.isEmpty());
 }
 
@@ -220,23 +214,12 @@ void MainWindow::countDown()
             newWindow=new MainWindow;
             newWindow->setStyleSheet(stylesheet);
             setCenterOfApplication(newWindow);
-
-            //construct();
             newWindow->show();
         }
     }
     time=time.addSecs(-1);
 }
 
-void MainWindow::setStatus(int a)
-{
-    refreshVel=a;
-}
-
-int MainWindow::getStatus()
-{
-    return refreshVel;
-}
 
 void MainWindow::logout()
 {
