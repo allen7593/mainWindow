@@ -43,7 +43,7 @@ void MainWindow::construct()
     QWidget *centerWindow=new QWidget;
     this->setCentralWidget(centerWindow);
 
-    time = QTime(0,1,30);
+    time = QTime(0,2,0);
     QTimer *timer=new QTimer(this);
     timer->setInterval(1000);
     timeCount=1000;

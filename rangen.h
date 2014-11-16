@@ -3,6 +3,8 @@
 
 #define RAND_MAX1 100
 
+#include <random>
+
 class ranGen
 {
 public:
@@ -10,13 +12,8 @@ public:
 
     long rand(void);
     void srand(int);
-    int rrand(int);
 private:
-#if __SIZEOF_POINTER__ == 4
-    long
-#endif
-    long next;
-
+    std::mt19937 mt;
 };
 
 #endif // RANGEN_H

@@ -119,7 +119,8 @@ void picGen::loadShare1()
     ossT<<regTime.toStdString();
     time_t rTime;
     ossT>>rTime;
-    int timeD=(time(NULL)-rTime)/300;
+    time_t t= time(NULL);
+    int timeD=(t-rTime)/120;
 
     std::stringstream ss;
     ss<<std::hex<<saved.toStdString();
@@ -141,7 +142,7 @@ void picGen::loadShare1()
     ossC2<<convert;
     ossC2>>seed;
 
-
+    std::cout<<seed<<endl;
     setKey(seed);
     share1Gen();
 
@@ -166,7 +167,7 @@ void picGen::excu()
     extendShare();
 
 
-    saveAll();
+    //saveAll();
 }
 
 void picGen::setKey(int num)
@@ -398,6 +399,6 @@ void picGen::alignment()
     painter.drawEllipse(picAli->width()-radius*2-muinus,picAli->height()-radius*2-muinus,radius*2,radius*2);
     painter.end();
 
-    picAli->save("picAli.png");
+    //picAli->save("picAli.png");
 }
 
