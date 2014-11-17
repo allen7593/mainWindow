@@ -12,7 +12,9 @@
 #include <QMessageBox>
 #include <sstream>
 #include <QString>
+#include <fstream>
 #include "rangen.h"
+#include "aes_ctr.h"
 
 class picGen
 {

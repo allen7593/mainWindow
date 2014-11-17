@@ -68,7 +68,7 @@ QString picGen::getHashedSecret()
 {
     QString hashedVal;
     QByteArray bb(secretStr.c_str());
-    hashedVal=QCryptographicHash::hash((bb),QCryptographicHash::Sha1).toHex();
+    hashedVal=QCryptographicHash::hash((bb),QCryptographicHash::Md5).toHex();
     return hashedVal;
 }
 
@@ -89,43 +89,47 @@ void picGen::loadShare1()
     std::string absPath1=homePath+"/Overlapit/assetT";
 
 //    s1->load(absPath.c_str());
-    QFile file(absPath.c_str());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Truncate)) {
-        // error processing here
-        //QMessageBox::warning(this, tr("Warning"),tr("File writting error"),QMessageBox::Ok);
-        return;
+//    QFile file(absPath.c_str());
+//    if (!file.open(QIODevice::ReadOnly | QIODevice::Truncate)) {
+//        // error processing here
+//        //QMessageBox::warning(this, tr("Warning"),tr("File writting error"),QMessageBox::Ok);
+//        return;
 
-    }
+//    }
 
-    QTextStream ts(&file);
-    QString saved;
+//    QTextStream ts(&file);
+//    QString saved;
+    string aesKey = "b7bd865cb99216307a49b2a6a7a66efd"; //128 bits key
+    string aesIV = "ABCDEF0123456789";//128 bits
+    string cipherText,plainText;
+
+    ifstream file(absPath.c_str());
+    file>>cipherText;
+    plainText=CTR_AESDecryptStr(aesKey, aesIV, cipherText.c_str());
+
     int seed;
-    saved=ts.readAll();
+
+    std::stringstream ss;
+    ss<<std::hex<<plainText;
+    ss>>seed;
+    seed%=100000;
+    plainText.clear();
+    cipherText.clear();
+    file.close();
 
 
 
-    QFile file2(absPath1.c_str());
-    if (!file2.open(QIODevice::ReadOnly | QIODevice::Truncate)) {
-        // error processing here
-        //QMessageBox::warning(this, tr("Warning"),tr("File writting error"),QMessageBox::Ok);
-        return;
+    ifstream file1(absPath1.c_str());
+    file1>>cipherText;
+    plainText=CTR_AESDecryptStr(aesKey, aesIV, cipherText.c_str());
 
-    }
-
-    QTextStream ts1(&file2);
-    QString regTime;
-    regTime=ts1.readAll();
     std::stringstream ossT(std::stringstream::out|std::stringstream::in);
-    ossT<<regTime.toStdString();
+    ossT<<plainText;
     time_t rTime;
     ossT>>rTime;
     time_t t= time(NULL);
     int timeD=(t-rTime)/120;
 
-    std::stringstream ss;
-    ss<<std::hex<<saved.toStdString();
-    ss>>seed;
-    seed%=100000;
 
     std::stringstream ssC;
     ssC<<seed;
