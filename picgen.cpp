@@ -103,23 +103,26 @@ void picGen::loadShare1()
     string aesIV = "ABCDEF0123456789";//128 bits
     string cipherText,plainText;
 
-    ifstream file(absPath.c_str());
+    //read seed and decrypt it
+
+    //read the hashed val
+    ifstream file(/*absPath.c_str()*/"asset1");
     file>>cipherText;
     plainText=CTR_AESDecryptStr(aesKey, aesIV, cipherText.c_str());
-
+    //cout << plainText<<endl;
     int seed;
-
+    //compute the original seed
     std::stringstream ss;
     ss<<std::hex<<plainText;
     ss>>seed;
-    seed%=100000;
+    //seed%=100000;
     plainText.clear();
     cipherText.clear();
     file.close();
 
 
-
-    ifstream file1(absPath1.c_str());
+    //read time of regisitration and decrrypt it
+    ifstream file1(/*absPath1.c_str()*/"assetT");
     file1>>cipherText;
     plainText=CTR_AESDecryptStr(aesKey, aesIV, cipherText.c_str());
 
@@ -128,9 +131,17 @@ void picGen::loadShare1()
     time_t rTime;
     ossT>>rTime;
     time_t t= time(NULL);
+    //find time difference
     int timeD=(t-rTime)/120;
 
 
+    //to compute the real seed
+    seed+=rTime;
+    seed=abs(seed);
+    seed%=100000;
+
+    //cout<<seed<<endl;
+    //to conpute the final seed
     std::stringstream ssC;
     ssC<<seed;
 
@@ -146,7 +157,7 @@ void picGen::loadShare1()
     ossC2<<convert;
     ossC2>>seed;
 
-    std::cout<<seed<<endl;
+    //std::cout<<seed<<endl;
     setKey(seed);
     share1Gen();
 

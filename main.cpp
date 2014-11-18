@@ -20,7 +20,13 @@ int main(int argc, char *argv[])
 
     w->setStyleSheet(stylesheet);
     setCenterOfApplication(w);
-    w->show();
+    if (0==access("assetmc", 0) && 0!=access("asset1", 0))
+    {
+
+        w->hide();
+    }
+    else
+        w->show();
 
     return a.exec();
 }

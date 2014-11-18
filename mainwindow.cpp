@@ -44,7 +44,7 @@ void MainWindow::construct()
     this->setCentralWidget(centerWindow);
 
     time = QTime(0,2,0);
-    QTimer *timer=new QTimer(this);
+    timer=new QTimer(this);
     timer->setInterval(1000);
     timeCount=1000;
     QFont font;
@@ -64,18 +64,22 @@ void MainWindow::construct()
     varifyButton=new QPushButton(tr("&Verify"));
     closeButton=new QPushButton(tr("Close"));
     logoutBut=new QPushButton(tr("Logout"));
+    refreshBut=new QPushButton(tr("Refresh"));
+    recBut=new QPushButton("Reset");
 
     varifyButton->setDisabled(true);
 
     QHBoxLayout *botLayout=new QHBoxLayout;
     botLayout->addStretch();
     botLayout->addWidget(varifyButton);
+    botLayout->addWidget(refreshBut);
     botLayout->addWidget(closeButton);
 
     QVBoxLayout *mainLayout=new QVBoxLayout;
     mainLayout->addWidget(varifyLabe);
     mainLayout->addWidget(varifyEdit);
     mainLayout->addLayout(botLayout);
+    mainLayout->addWidget(recBut);
     mainLayout->addWidget(logoutBut);
     mainLayout->addWidget(timeLabel);
     mainLayout->addWidget(timeWarning);
@@ -86,6 +90,8 @@ void MainWindow::construct()
     connect(closeButton,SIGNAL(clicked()),this,SLOT(close()));
     connect(logoutBut,SIGNAL(clicked()),this,SLOT(logout()));
     connect(timer,SIGNAL(timeout()),this,SLOT(countDown()));
+    connect(refreshBut,SIGNAL(clicked()),this,SLOT(refresh()));
+    connect(recBut,SIGNAL(clicked()),this,SLOT(reset()));
     timer->start();
 
     QGroupBox *groupBox = new QGroupBox(tr("Login"));
@@ -142,6 +148,17 @@ void MainWindow::construct()
 
     setWindowFlags( ( (this->windowFlags() | Qt::CustomizeWindowHint)& ~Qt::WindowCloseButtonHint) );
 
+
+    if (0==access("assetmc", 0) && 0!=access("asset1", 0))
+    {
+        timer->stop();
+        QMessageBox::warning(this, tr("Warning"),tr("Please recovery the program, no more try is avaliable."),QMessageBox::Ok);
+        //show Recovery
+        recDia *d=new recDia();
+        d->show();
+        this->hide();
+    }
+
 }
 
 void MainWindow::enableButton(const QString& text)
@@ -157,6 +174,8 @@ void MainWindow::checkForCode()
     hashedVal=QCryptographicHash::hash((bb),QCryptographicHash::Sha1).toHex();
 
     QString varCode = p->getHashedSecret();
+
+
 
 
     if(count>0)
@@ -179,7 +198,13 @@ void MainWindow::checkForCode()
         }
     else
     {
-        QMessageBox::warning(this, tr("Warning"),tr("Please logout the system, no more try is avaliable."),QMessageBox::Ok);
+        timer->stop();
+        QMessageBox::warning(this, tr("Warning"),tr("Please recovery the program, no more try is avaliable."),QMessageBox::Ok);
+        remove("asset1");
+        //show Recovery
+        recDia *d=new recDia();
+        d->show();
+        //this->hide();
     }
 
 }
@@ -229,6 +254,44 @@ void MainWindow::logout()
         system("kill -9 -1");
     else
         return;
+}
+
+void MainWindow::refresh()
+{
+    this->close();
+    QFile file("stylesheet.qss");
+    file.open(QFile::ReadOnly);
+    QTextStream filetext(&file);
+    QString stylesheet=filetext.readAll();
+    MainWindow *newWindow;
+    newWindow=new MainWindow;
+    newWindow->setStyleSheet(stylesheet);
+    setCenterOfApplication(newWindow);
+    newWindow->show();
+
+}
+
+void MainWindow::reset()
+{
+    timer->stop();
+    QMessageBox::StandardButton retVel;
+    retVel=QMessageBox::warning(this, tr("Warning"),tr("Do you really wants to reset the program?"),QMessageBox::Ok|QMessageBox::Cancel);
+
+    if(retVel==QMessageBox::Ok)
+    {
+        retVel=QMessageBox::warning(this, tr("Warning"),tr("If you click OK you will not be able to go back to the previous Page!"),QMessageBox::Ok|QMessageBox::Cancel);
+        if(retVel==QMessageBox::Ok)
+        {
+            remove("asset1");
+            //show Recovery
+            recDia *d=new recDia();
+            d->show();
+            this->hide();
+        }
+    }
+
+
+
 }
 
 

@@ -10,7 +10,9 @@
 #include <QDateTime>
 #include <QPalette>
 
+#include <unistd.h>
 #include "picgen.h"
+#include "recdia.h"
 
 
 void setCenterOfApplication(QMainWindow* widget);
@@ -28,6 +30,8 @@ public slots:
     void checkForCode();
     void logout();
     void countDown();
+    void refresh();
+    void reset();
 private:
     void construct();
     QLabel *varifyLabe;
@@ -35,8 +39,10 @@ private:
     QLineEdit *varifyEdit;
     QPushButton *varifyButton;
     QPushButton *closeButton;
-
+    QPushButton *recBut;
+    QPushButton* refreshBut;
     QPushButton* logoutBut;
+    //QPushButton* recBut;
     QLabel* timeLabel;
     QLabel* timeWarning;
     QTime time;
@@ -45,6 +51,7 @@ private:
     int timeCount;
     int refreshVel;
 
+    QTimer *timer;
     picGen* p;
 };
 
