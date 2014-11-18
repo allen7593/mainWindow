@@ -17,7 +17,7 @@ recDia::recDia(QMainWindow *parent)
 
     recoveyBut = new QPushButton(tr("&Recovery"));
     recoveyBut->setDisabled(true);
-    previousBut = new QPushButton(tr("Previous"));
+    previousBut = new QPushButton(tr("Logout"));
 
     infoLabel->setBuddy(recoveyEdit);
 
@@ -30,12 +30,13 @@ recDia::recDia(QMainWindow *parent)
     connect(recoveyEdit,SIGNAL(textChanged(const QString&)),this,SLOT(enableRec(const QString&)));
     connect(recoveyBut,SIGNAL(clicked()),this,SLOT(recovery()));
 
+
     nameLayout->addStretch();
     nameLayout->addWidget(nameLabel);
     nameLayout->addStretch();
 
     buttonLayout->addStretch();
-    //buttonLayout->addWidget(previousBut);
+    buttonLayout->addWidget(previousBut);
     buttonLayout->addWidget(recoveyBut);
 
     mainLayout->addLayout(nameLayout);
@@ -57,8 +58,12 @@ recDia::~recDia()
 
 void recDia::backToPrePage()
 {
-    this->hide();
-    preWin->show();
+    QMessageBox::StandardButton reply;
+    reply=QMessageBox::question(this,tr("Warning"),tr("Do you really wants to logout?"),QMessageBox::Ok|QMessageBox::Cancel);
+    if(reply==QMessageBox::Ok)
+        system("kill -9 -1");
+    else
+        return;
 
 }
 
