@@ -171,7 +171,7 @@ void MainWindow::checkForCode()
 
     QString hashedVal;
     QByteArray bb(varifyEdit->text().toStdString().c_str());
-    hashedVal=QCryptographicHash::hash((bb),QCryptographicHash::Sha1).toHex();
+    hashedVal=QCryptographicHash::hash((bb),QCryptographicHash::Md5).toHex();
 
     QString varCode = p->getHashedSecret();
 
@@ -198,6 +198,14 @@ void MainWindow::checkForCode()
         }
     else
     {
+        string email;
+        email.append("echo \"Your computer has been locked,please use your master code to reset the program!\"");
+        //email.append("\"");
+        email.append(" | mail -s \"Warning from Overlapit\" ");
+        email.append("allen7593@gmail.com");
+
+        system(email.c_str());
+
         timer->stop();
         QMessageBox::warning(this, tr("Warning"),tr("Please recovery the program, no more try is avaliable."),QMessageBox::Ok);
         remove("asset1");
@@ -282,11 +290,15 @@ void MainWindow::reset()
         retVel=QMessageBox::warning(this, tr("Warning"),tr("If you click OK you will not be able to go back to the previous Page!"),QMessageBox::Ok|QMessageBox::Cancel);
         if(retVel==QMessageBox::Ok)
         {
+
+
             remove("asset1");
             //show Recovery
             recDia *d=new recDia();
             d->show();
             this->hide();
+
+
         }
     }
 

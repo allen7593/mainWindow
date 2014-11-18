@@ -28,7 +28,7 @@ std::string generateRanStr()
 picGen::picGen()
 {
 
-    homePath="/home/allen7593";
+    //homePath="/home/allen7593";
 
     black=qRgba(0,0,0,255);
     white=qRgba(255,255,255,0);
@@ -85,8 +85,8 @@ QImage* picGen::getShare2()
 void picGen::loadShare1()
 {
 
-    std::string absPath=homePath+"/Overlapit/asset1";
-    std::string absPath1=homePath+"/Overlapit/assetT";
+    std::string absPath="asset1";
+    std::string absPath1="assetT";
 
 //    s1->load(absPath.c_str());
 //    QFile file(absPath.c_str());
